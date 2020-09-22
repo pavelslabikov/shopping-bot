@@ -3,14 +3,19 @@ package main;
 import botcommands.*;
 import storages.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShoppingBot {
     public final ArrayList<User> users;
-    public IStorage storage;
+
+    private final IStorage storage;
+    private final Map<String, BotCommand> commands;
 
     public ShoppingBot() {
         users = new ArrayList<>();
         storage = new Storage();
+        commands = new HashMap<>();
     }
 
     public void receiveMessage(User sender, String text) {
@@ -19,23 +24,19 @@ public class ShoppingBot {
 
         var args = text.split(" ");
         var defaultResponse = "Неизвестная команда! Введите /help для просмотра списка всех команд.";
-
-        switch (args[0]) {
-            case "/help" -> new HelpCommand(this).execute(sender, args);
-            case "/search" -> new SearchCommand(this).execute(sender, args);
-            case "/add" -> new AddToCartCommand(this).execute(sender, args);
-            case "/cart" -> new ShowCartCommand(this).execute(sender, args);
-            case "/stock" -> new ShowStockCommand(this).execute(sender, args);
-            case "/clear" -> new ClearCartCommand().execute(sender, args);
-            case "/exit" -> new ExitCommand().execute(sender, args);
-            default -> sender.receiveResponse(defaultResponse);
-        }
+        if (commands.containsKey(args[0]))
+            commands.get(args[0]).execute(sender, args);
+        else
+            Main.printMessage(defaultResponse);
     }
 
-    public static void main(String [] args) {
-        var bot = new ShoppingBot();
-        bot.users.add(new User(bot));
-        for (var user : bot.users)
-            user.waitForInput();
+    public void registerCommands() {
+        commands.put("/help", new HelpCommand());
+        commands.put("/cart", new ShowCartCommand());
+        commands.put("/clear", new ClearCartCommand());
+        commands.put("/exit", new ExitCommand());
+        commands.put("/search", new SearchCommand(storage));
+        commands.put("/add", new AddToCartCommand(storage));
+        commands.put("/stock", new ShowStockCommand(storage));
     }
 }

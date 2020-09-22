@@ -1,29 +1,32 @@
 package botcommands;
 
-import main.ShoppingBot;
+import main.Main;
+import storages.*;
 import main.User;
 
 public class AddToCartCommand extends BotCommand {
-    public AddToCartCommand(ShoppingBot botContext) {
-        super(botContext);
+    private final IStorage storage;
+
+    public AddToCartCommand(IStorage storage) {
+        this.storage = storage;
     }
 
     @Override
     public void execute(User sender, String [] args) {
         if (args.length != 3) {
-            sender.receiveResponse("Неверное количество аргументов для команды!\nИспользуйте: /add <ID> <amount>");
+            Main.printMessage("Неверное количество аргументов для команды!\nИспользуйте: /add <ID> <amount>");
             return;
         }
 
         var id = Integer.parseInt(args[1]);
-        var itemToAdd = bot.storage.getItem(id);
+        var itemToAdd = storage.getItem(id);
         if (itemToAdd == null) {
-            sender.receiveResponse("Введённый идентефикатор товара не был найден на складе!");
+            Main.printMessage("Введённый идентефикатор товара не был найден на складе!");
             return;
         }
 
         if (sender.cart.containsKey(itemToAdd)) {
-            sender.receiveResponse("Данный товар уже находится в корзине!");
+            Main.printMessage("Данный товар уже находится в корзине!");
             return;
         }
 
@@ -31,17 +34,17 @@ public class AddToCartCommand extends BotCommand {
             Integer.parseInt(args[2]);
         }
         catch (NumberFormatException e) {
-            sender.receiveResponse("Некорректный формат ввода!");
+            Main.printMessage("Некорректный формат ввода!");
             return;
         }
 
         var amountToAdd = Integer.parseInt(args[2]);
-        if (amountToAdd > bot.storage.getItemAmount(id) || amountToAdd <= 0) {
-            sender.receiveResponse("Такого количества товара нет в наличии / Некорректное число.");
+        if (amountToAdd > storage.getItemAmount(id) || amountToAdd <= 0) {
+            Main.printMessage("Такого количества товара нет в наличии / Некорректное число.");
             return;
         }
 
         sender.cart.put(itemToAdd, amountToAdd);
-        sender.receiveResponse("Товар успешно добавлен в корзину!");
+        Main.printMessage("Товар успешно добавлен в корзину!");
     }
 }

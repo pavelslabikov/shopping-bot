@@ -1,20 +1,23 @@
 package botcommands;
 
-import main.ShoppingBot;
+import main.Main;
 import main.User;
+import storages.IStorage;
 
 public class ShowStockCommand extends BotCommand {
-    public ShowStockCommand(ShoppingBot botContext) {
-        super(botContext);
+    private final IStorage storage;
+
+    public ShowStockCommand(IStorage storage) {
+        this.storage = storage;
     }
 
     @Override
     public void execute(User sender, String [] args) {
         var currentStock = new StringBuilder("Список всех товаров в наличии:\n\n");
-        var storageItems = bot.storage.getAllItems();
+        var storageItems = storage.getAllItems();
         for (var item : storageItems)
             currentStock.append(String.format("%s\n", item));
 
-        sender.receiveResponse(currentStock.toString());
+        Main.printMessage(currentStock.toString());
     }
 }
