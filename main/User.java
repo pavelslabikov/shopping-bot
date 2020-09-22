@@ -10,9 +10,11 @@ import java.util.Map;
 
 public class User {
     public final Map<IStorageItem, Integer> cart;
+    public final int id;
 
     public User() {
         cart = new HashMap<>();
+        id = 1;
         Main.printMessage("Вас приветствует ShoppingBot v0.1!\n" +
                 "Данный бот позволяет совершать покупки прямо со склада производителя.\n" +
                 "Для просмотра полного функционала введите команду: /help\n");
@@ -26,7 +28,7 @@ public class User {
 
     public void exportCartContent() {
         try {
-            var writer = new FileWriter("main/log.txt", false);
+            var writer = new FileWriter(String.format("main/logs/log%s.txt", id), false);
             for (var item : cart.keySet())
                 writer.write(String.format("(%s) — %s шт.\n", item, cart.get(item)));
             writer.flush();
@@ -39,7 +41,7 @@ public class User {
         try {
             var text = new char[256];
             var result = new StringBuilder();
-            var writer = new FileReader("main/log.txt");
+            var writer = new FileReader(String.format("main/logs/log%s.txt", id));
             while (writer.read(text) > 0)
             {
                 result.append(text);

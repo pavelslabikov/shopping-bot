@@ -43,4 +43,4 @@ out/
 *.iml
 *.ipr
 *.iws
-/main/log.txt
+/main/logs/log.txt
