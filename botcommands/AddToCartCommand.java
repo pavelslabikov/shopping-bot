@@ -18,11 +18,25 @@ public class AddToCartCommand extends BotCommand {
             return;
         }
 
-        var id = Integer.parseInt(args[1]);
-        var itemToAdd = storage.getItem(id);
-        if (itemToAdd == null) {
-            Main.printMessage("Введённый идентефикатор товара не был найден на складе!");
-            return;
+        IStorageItem itemToAdd;
+        int id;
+        try {
+            id = Integer.parseInt(args[1]);
+            itemToAdd = storage.getItemById(id);
+            if (itemToAdd == null) {
+                Main.printMessage("Введённый идентефикатор товара не был найден на складе!");
+                return;
+            }
+        }
+
+        catch (NumberFormatException e) {
+            var name = args[1];
+            itemToAdd = storage.getItemByName(name);
+            id = itemToAdd.getId();
+            if (itemToAdd == null) {
+                Main.printMessage("Введённое имя товара не был найден на складе!");
+                return;
+            }
         }
 
         if (sender.cart.containsKey(itemToAdd)) {

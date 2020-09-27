@@ -17,7 +17,7 @@ public class SearchCommand extends BotCommand {
         if (args.length != 2)
             Main.printMessage("Неверное количество аргументов для команды!\nИспользуйте: /search <ID>");
         else {
-            var foundItem = storage.getItem(Integer.parseInt(args[1]));
+            var foundItem = storage.getItemById(Integer.parseInt(args[1]));
             var response = foundItem == null
                     ? "Товар не найден!"
                     : String.format("Найденный товар:\n%s", foundItem);

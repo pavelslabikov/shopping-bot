@@ -9,7 +9,7 @@ public class Storage implements IStorage{
     public Storage(){
         var items = new ArrayList<StorageItem>();
         for (var i = 0; i < 5; i++)
-            items.add(new StorageItem("First Item", i, i + 100, 5));
+            items.add(new StorageItem("First_Item", i, i + 100, 5));
         items.add(new StorageItem("Trava", 228, 2500, 1000));
         this.items = items;
     }
@@ -30,7 +30,7 @@ public class Storage implements IStorage{
         return result;
     }
 
-    public StorageItem getItem(int id){
+    public StorageItem getItemById(int id){
         for (var e : items){
             if (e.getId() == id)
                 return e;
@@ -39,8 +39,17 @@ public class Storage implements IStorage{
         return null;
     }
 
+    public StorageItem getItemByName(String name){
+        for (var e : items){
+            if (e.getName().equals(name))
+                return e;
+        }
+
+        return null;
+    }
+
     @Override
     public int getItemAmount(int id) {
-        return getItem(id).getCount();
+        return getItemById(id).getCount();
     }
 }

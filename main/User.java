@@ -12,9 +12,9 @@ public class User {
     public final Map<IStorageItem, Integer> cart;
     public final int id;
 
-    public User() {
+    public User(int id) {
         cart = new HashMap<>();
-        id = 1;
+        this.id = id;
         Main.printMessage("Вас приветствует ShoppingBot v0.1!\n" +
                 "Данный бот позволяет совершать покупки прямо со склада производителя.\n" +
                 "Для просмотра полного функционала введите команду: /help\n");

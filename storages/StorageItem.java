@@ -13,6 +13,8 @@ public class StorageItem implements IStorageItem {
         this.amount = amount;
     }
 
+    public String getName() { return name; }
+
     public int getId() {
         return id;
     }
