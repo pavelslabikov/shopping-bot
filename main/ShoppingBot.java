@@ -18,14 +18,14 @@ public class ShoppingBot {
         commands = new HashMap<>();
     }
 
-    public void receiveMessage(User sender, String text) {
+    public void receiveMessage(User user, String text) {
         if (text.equals(""))
             return;
 
         var args = text.split(" ");
         var defaultResponse = "Неизвестная команда! Введите /help для просмотра списка всех команд.";
         if (commands.containsKey(args[0]))
-            commands.get(args[0]).execute(sender, args);
+            commands.get(args[0]).execute(user, args);
         else
             Main.printMessage(defaultResponse);
     }

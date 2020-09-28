@@ -1,6 +1,8 @@
 package storages;
 
-public class StorageItem implements IStorageItem {
+import java.io.Serializable;
+
+public class StorageItem implements IStorageItem, Serializable {
     private final String name;
     private final int id;
     private final int price;
@@ -29,7 +31,7 @@ public class StorageItem implements IStorageItem {
 
     @Override
     public int hashCode() {
-        return id;
+        return Integer.hashCode(id);
     }
 
     @Override

@@ -8,9 +8,12 @@ public class Storage implements IStorage{
 
     public Storage(){
         var items = new ArrayList<StorageItem>();
-        for (var i = 0; i < 5; i++)
-            items.add(new StorageItem("First_Item", i, i + 100, 5));
+
+        items.add(new StorageItem("First_Item", 1, 100, 5));
+        items.add(new StorageItem("Second_Item", 2, 100, 5));
+        items.add(new StorageItem("Item1", 3, 100, 5));
         items.add(new StorageItem("Trava", 228, 2500, 1000));
+
         this.items = items;
     }
 

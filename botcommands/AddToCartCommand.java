@@ -13,52 +13,45 @@ public class AddToCartCommand extends BotCommand {
 
     @Override
     public void execute(User sender, String [] args) {
-        if (args.length != 3) {
-            Main.printMessage("Неверное количество аргументов для команды!\nИспользуйте: /add <ID> <amount>");
+        if (!areValid(args))
             return;
-        }
 
         IStorageItem itemToAdd;
-        int id;
-        try {
-            id = Integer.parseInt(args[1]);
+        if (args[1].matches("^\\d+")) {
+            var id = Integer.parseInt(args[1]);
             itemToAdd = storage.getItemById(id);
             if (itemToAdd == null) {
-                Main.printMessage("Введённый идентефикатор товара не был найден на складе!");
+                Main.printMessage("Введённый идентификатор товара не был найден на складе!");
                 return;
             }
-        }
 
-        catch (NumberFormatException e) {
-            var name = args[1];
-            itemToAdd = storage.getItemByName(name);
-            id = itemToAdd.getId();
+            sender.cart.addItem(itemToAdd, Integer.parseInt(args[2]), storage.getItemAmount(id));
+        }
+        else {
+            itemToAdd = storage.getItemByName(args[1]);
             if (itemToAdd == null) {
-                Main.printMessage("Введённое имя товара не был найден на складе!");
+                Main.printMessage("Введённое имя товара не было найдено на складе!");
                 return;
             }
-        }
 
-        if (sender.cart.containsKey(itemToAdd)) {
-            Main.printMessage("Данный товар уже находится в корзине!");
-            return;
+            var id = itemToAdd.getId();
+            sender.cart.addItem(itemToAdd, Integer.parseInt(args[2]), storage.getItemAmount(id));
+        }
+    }
+
+    private boolean areValid(String [] args) {
+        if (args.length != 3) {
+            Main.printMessage("Неверное количество аргументов для команды!\nИспользуйте: /add <ID> <amount>");
+            return false;
         }
 
         try {
             Integer.parseInt(args[2]);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             Main.printMessage("Некорректный формат ввода!");
-            return;
+            return false;
         }
 
-        var amountToAdd = Integer.parseInt(args[2]);
-        if (amountToAdd > storage.getItemAmount(id) || amountToAdd <= 0) {
-            Main.printMessage("Такого количества товара нет в наличии / Некорректное число.");
-            return;
-        }
-
-        sender.cart.put(itemToAdd, amountToAdd);
-        Main.printMessage("Товар успешно добавлен в корзину!");
+        return true;
     }
 }
