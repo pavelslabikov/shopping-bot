@@ -1,7 +1,6 @@
 package storages;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Storage implements IStorage{
     public ArrayList<StorageItem> items;

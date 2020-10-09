@@ -1,7 +1,6 @@
-package main;
+package app;
 
 import storages.IStorageItem;
-
 import java.io.*;
 import java.util.HashMap;
 
@@ -12,19 +11,17 @@ public class Cart {
         content = new HashMap<>();
     }
 
-    public void addItem(IStorageItem item, int amountToAdd, int amountInStock) {
+    public String addItem(IStorageItem item, int amountToAdd, int amountInStock) {
         if (content.containsKey(item)) {
-            Main.printMessage("Данный товар уже находится в корзине!");
-            return;
+            return "Данный товар уже находится в корзине!";
         }
 
         if (amountToAdd > amountInStock) {
-            Main.printMessage("Такого количества товара нет на складе!");
-            return;
+            return "Такого количества товара нет на складе!";
         }
 
         content.put(item, amountToAdd);
-        Main.printMessage("Товар успешно добавлен в корзину!");
+        return "Товар успешно добавлен в корзину!";
     }
 
     public void removeItems() {
@@ -53,22 +50,26 @@ public class Cart {
         }
     }
 
-    public void importContent(String filename) {
+    public String importContent(String filename) {
         if (!new File(filename).exists())
-            return;
+            return "";
 
+        var response = new StringBuilder();
         try {
             var objectStream = new ObjectInputStream(new FileInputStream(filename));
             var items = (Object[]) objectStream.readObject();
             if (items.length != 0) {
-                Main.printMessage("В прошлый раз вы забыли оформить заказ на следующие товары:\n");
-                for (var item : items)
-                    Main.printMessage(item.toString());
+                response.append("В прошлый раз вы забыли оформить заказ на следующие товары:\n");
+                for (var item : items) {
+                    response.append(item.toString());
+                    response.append("\n");
+                }
             }
 
             objectStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return response.toString();
     }
 }

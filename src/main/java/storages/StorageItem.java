@@ -6,7 +6,7 @@ public class StorageItem implements IStorageItem, Serializable {
     private final String name;
     private final int id;
     private final int price;
-    private int amount;
+    private final int amount;
 
     public StorageItem(String name, int id, int price, int amount){
         this.name = name;
