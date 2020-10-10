@@ -1,6 +1,7 @@
 package app;
 
 import storages.IStorageItem;
+
 import java.io.*;
 import java.util.HashMap;
 
@@ -13,7 +14,7 @@ public class Cart {
 
     public String addItem(IStorageItem item, int amountToAdd, int amountInStock) {
         if (content.containsKey(item)) {
-            return "Данный товар уже находится в корзине!";
+            return "\u274C Данный товар уже находится в корзине!";
         }
 
         if (amountToAdd > amountInStock) {
@@ -24,15 +25,16 @@ public class Cart {
         return "Товар успешно добавлен в корзину!";
     }
 
-    public void removeItems() {
+    public String removeItems() {
         content.clear();
+        return "Корзина успешно очищена!";
     }
 
     public String getItems() {
         if (content.isEmpty())
             return "Ваша корзина в данный момент пуста!";
 
-        var allItems = new StringBuilder("Список товаров в корзине:\n");
+        var allItems = new StringBuilder("\uD83D\uDED2 Список товаров в корзине:\n");
         for (var item : content.keySet())
             allItems.append(String.format("(%s) — %s шт.\n", item, content.get(item)));
         return allItems.toString();

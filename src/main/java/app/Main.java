@@ -9,8 +9,8 @@ public class Main {
         ApiContextInitializer.init();
         var bot = new ShoppingBot();
         bot.registerCommands();
-        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
+            var telegramBotsApi = new TelegramBotsApi();
             telegramBotsApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {
             e.printStackTrace();

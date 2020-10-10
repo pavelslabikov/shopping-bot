@@ -1,48 +1,47 @@
 package botcommands;
 
-import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import app.Customer;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import storages.IStorage;
 import storages.IStorageItem;
 
-public class SearchCommand extends BotCommand {
-    private final IStorage storage;
+import java.util.HashMap;
 
-    public SearchCommand(String commandIdentifier, String description, IStorage storage) {
-        super(commandIdentifier, description);
+public class SearchCommand extends ShoppingCommand {
+    private final IStorage storage;
+    private final HashMap<Integer, Customer> customers;
+
+    public SearchCommand(HashMap<Integer, Customer> customers, IStorage storage) {
+        super("/search", "description");
+        this.customers = customers;
         this.storage = storage;
     }
 
     @Override
-    public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        var message = new SendMessage();
-        message.setChatId(chat.getId());
-        String response = "";
-        if (strings.length != 1){
-            response = "Неверное количество аргументов для команды!\nИспользуйте: /search <ID/NAME>";
+    public void execute(AbsSender absSender, User user, Chat chat, String[] args) {
+        if (!customers.containsKey(user.getId())) {
+            execute(absSender, chat, "\u274C Прежде чем вводить данную команду, начните работу с ботом!");
+            return;
         }
 
+        var response = "";
+        if (args.length != 1)
+            response = "\u274C Неверное количество аргументов для команды!\nИспользуйте: /search <ID/NAME>";
         else {
             IStorageItem foundItem;
-            if (strings[0].matches("\\d+")) {
-                var id = Integer.parseInt(strings[0]);
+            if (args[0].matches("\\d+")) {
+                var id = Integer.parseInt(args[0]);
                 foundItem = storage.getItemById(id);
             } else
-                foundItem = storage.getItemByName(strings[0]);
+                foundItem = storage.getItemByName(args[0]);
             response = foundItem == null
-                    ? "Товар не найден!"
-                    : String.format("Найденный товар:\n%s", foundItem);
+                    ? "\u2753 Товар не найден!"
+                    : String.format("\uD83D\uDD0E Найденный товар:\n%s", foundItem);
         }
-        message.setText(response);
-        try {
-            absSender.execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+
+        execute(absSender, chat, response);
     }
 }
 
