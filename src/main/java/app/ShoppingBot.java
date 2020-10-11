@@ -1,6 +1,8 @@
 package app;
 
 import botcommands.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,10 +12,11 @@ import storages.Storage;
 
 import java.util.HashMap;
 
-public class ShoppingBot extends TelegramLongPollingCommandBot{
-    public final HashMap<Integer, Customer> customers;
+public class ShoppingBot extends TelegramLongPollingCommandBot {
+    private static final Logger logger = LoggerFactory.getLogger(ShoppingBot.class);
 
     private final IStorage storage;
+    private final HashMap<Integer, Customer> customers;
 
     public ShoppingBot() {
         storage = new Storage();
@@ -25,6 +28,7 @@ public class ShoppingBot extends TelegramLongPollingCommandBot{
         if (!update.hasMessage())
             return;
 
+        logger.info("User {} sent non-command message.", update.getMessage().getFrom().getUserName());
         var currentChatId = update.getMessage().getChatId();
         sendReplyToUser(currentChatId, "\u274C Что-то пошло не так!\n" +
                 "Введите /help для просмотра списка всех команд.");
@@ -57,7 +61,7 @@ public class ShoppingBot extends TelegramLongPollingCommandBot{
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            logger.error("Error occurred: ", e);
         }
     }
 }

@@ -1,5 +1,7 @@
 package botcommands;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -7,6 +9,8 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public abstract class ShoppingCommand extends BotCommand {
+    public static final Logger logger = LoggerFactory.getLogger(ShoppingCommand.class);
+
     public ShoppingCommand(String command, String description) {
         super(command, description);
     }
@@ -18,7 +22,7 @@ public abstract class ShoppingCommand extends BotCommand {
         try {
             sender.execute(message);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            logger.error("Error occurred: ", e);
         }
     }
 }

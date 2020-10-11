@@ -22,10 +22,15 @@ public class StartCommand extends ShoppingCommand {
                 "Данный бот позволяет совершать покупки прямо со склада производителя.\n" +
                 "Для просмотра полного функционала введите команду: /help";
 
-        if (customers.containsKey(user.getId()))
+        if (customers.containsKey(user.getId())) {
             text = "\u274C Вы уже начали работу с ботом!";
-        else
+            logger.info("User {} tried to use command without starting the bot.", user.getUserName());
+        }
+
+        else {
             customers.put(user.getId(), new Customer(user.getId(), user.getUserName()));
+            logger.info("User {} started working with bot.", user.getUserName());
+        }
 
         execute(absSender, chat, text);
     }
