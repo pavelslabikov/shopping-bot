@@ -1,19 +1,26 @@
 package botcommands;
 
 import app.Customer;
+import app.Keyboard;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.bots.AbsSender;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.HashMap;
 
 
 public class StartCommand extends ShoppingCommand {
     private final HashMap<Integer, Customer> customers;
+    private final ReplyKeyboardMarkup keyboard;
 
     public StartCommand(HashMap<Integer, Customer> customers) {
         super("/start", "start working with bot");
         this.customers = customers;
+        var keyboard = new Keyboard();
+        this.keyboard = keyboard.getKeyboard();
     }
 
     @Override
@@ -27,6 +34,15 @@ public class StartCommand extends ShoppingCommand {
         else
             customers.put(user.getId(), new Customer(user.getId(), user.getUserName()));
 
-        execute(absSender, chat, text);
+        var message = new SendMessage();
+        message.setChatId(chat.getId());
+        message.setText(text);
+        message.enableMarkdown(true);
+        message.setReplyMarkup(keyboard);
+        try {
+            absSender.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 }
