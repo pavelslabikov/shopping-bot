@@ -28,13 +28,13 @@ public class ShoppingBot extends TelegramLongPollingCommandBot {
         if (!update.hasMessage())
             return;
 
-        logger.info("User {} sent non-command message.", update.getMessage().getFrom().getUserName());
         var currentChatId = update.getMessage().getChatId();
         sendReplyToUser(currentChatId, "\u274C Что-то пошло не так!\n" +
                 "Введите /help для просмотра списка всех команд.");
     }
 
     public void registerCommands() {
+        logger.info("Registering commands...");
         register(new HelpCommand());
         register(new ShowCartCommand(customers));
         register(new ClearCartCommand(customers));
@@ -61,7 +61,7 @@ public class ShoppingBot extends TelegramLongPollingCommandBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            logger.error("Error occurred: ", e);
+            logger.error("Caught exception with following stacktrace:", e);
         }
     }
 }

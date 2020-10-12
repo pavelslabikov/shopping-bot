@@ -22,7 +22,7 @@ public abstract class ShoppingCommand extends BotCommand {
         try {
             sender.execute(message);
         } catch (TelegramApiException e) {
-            logger.error("Error occurred: ", e);
+            logger.error("Caught exception with following stacktrace:", e);
         }
     }
 }
