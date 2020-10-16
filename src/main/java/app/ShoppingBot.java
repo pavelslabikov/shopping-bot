@@ -34,14 +34,13 @@ public class ShoppingBot extends TelegramLongPollingCommandBot {
     }
 
     public void registerCommands() {
-        logger.info("Registering commands...");
-        register(new HelpCommand());
-        register(new ShowCartCommand(customers));
-        register(new ClearCartCommand(customers));
-        register(new SearchCommand(customers, storage));
-        register(new AddToCartCommand(customers, storage));
-        register(new ShowStockCommand(customers, storage));
-        register(new StartCommand(customers));
+        register(new CommandAdapter(new HelpCommand()));
+        register(new CommandAdapter(new ShowCartCommand(customers)));
+        register(new CommandAdapter(new ClearCartCommand(customers)));
+        register(new CommandAdapter(new SearchCommand(customers, storage)));
+        register(new CommandAdapter(new AddToCartCommand(customers, storage)));
+        register(new CommandAdapter(new ShowStockCommand(customers, storage)));
+        register(new CommandAdapter(new StartCommand(customers)));
     }
 
     @Override
