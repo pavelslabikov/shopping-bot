@@ -10,7 +10,7 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String [] args) {
-        logger.info("Starting application...");
+        logger.info("Initializing API context...");
         ApiContextInitializer.init();
         var bot = new ShoppingBot();
         bot.registerCommands();
@@ -18,7 +18,7 @@ public class Main {
             var telegramBotsApi = new TelegramBotsApi();
             telegramBotsApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {
-            logger.error("Caught exception with following stacktrace:", e);
+            logger.error("Telegram API cannot register bot", e);
         }
     }
 }

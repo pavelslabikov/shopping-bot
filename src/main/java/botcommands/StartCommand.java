@@ -18,16 +18,16 @@ public class StartCommand implements IBotCommand {
 
     @Override
     public String getDescription() {
-        return "null";
+        return "Start working with bot";
     }
 
     @Override
     public String execute(Integer userId, String[] args) {
         if (customers.containsKey(userId)) {
+            logger.info("Customer {} tried to /start already working bot", userId);
             return "\u274C Вы уже начали работу с ботом!";
-        }
-
-        else {
+        } else {
+            logger.info("User {} has become a new customer", userId);
             customers.put(userId, new Customer(userId));
         }
 

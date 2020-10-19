@@ -17,7 +17,7 @@ public class ClearCartCommand implements IBotCommand {
 
     @Override
     public String getDescription() {
-        return "null";
+        return "Clear cart";
     }
 
     @Override

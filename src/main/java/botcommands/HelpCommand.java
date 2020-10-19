@@ -8,7 +8,7 @@ public class HelpCommand implements IBotCommand {
 
     @Override
     public String getDescription() {
-        return "null";
+        return "Shows command help";
     }
 
     @Override

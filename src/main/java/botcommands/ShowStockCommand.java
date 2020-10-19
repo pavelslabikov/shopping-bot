@@ -2,7 +2,6 @@ package botcommands;
 
 import app.Customer;
 import storages.IStorage;
-
 import java.util.HashMap;
 
 public class ShowStockCommand implements IBotCommand {
@@ -21,7 +20,7 @@ public class ShowStockCommand implements IBotCommand {
 
     @Override
     public String getDescription() {
-        return "null";
+        return "Show items in stock";
     }
 
     @Override

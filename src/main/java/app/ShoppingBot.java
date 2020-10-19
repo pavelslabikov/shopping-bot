@@ -25,8 +25,10 @@ public class ShoppingBot extends TelegramLongPollingCommandBot {
 
     @Override
     public void processNonCommandUpdate(Update update) {
-        if (!update.hasMessage())
+        if (!update.hasMessage()) {
+            logger.debug("An update without message received: {}", update);
             return;
+        }
 
         var currentChatId = update.getMessage().getChatId();
         sendReplyToUser(currentChatId, "\u274C Что-то пошло не так!\n" +
@@ -60,7 +62,7 @@ public class ShoppingBot extends TelegramLongPollingCommandBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            logger.error("Caught exception with following stacktrace:", e);
+            logger.error("Cannot send reply to user: {}", message, e);
         }
     }
 }

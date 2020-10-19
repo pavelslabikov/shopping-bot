@@ -9,10 +9,6 @@ public class Customer {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public Cart getCart() {
         return cart;
     }

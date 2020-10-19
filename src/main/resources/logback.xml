@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <appender name="roll-by-time-and-size"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>src/main/logs/current-log.log</file>
+
+        <rollingPolicy
+          class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>
+                src/main/logs/%i - %d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxFileSize>5KB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>1MB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>[%.-1level]: %d{ISO8601} | in %-28class{28} | %msg%n</pattern>
+        </encoder>
+    </appender>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
@@ -10,6 +28,6 @@
     </appender>
 
     <root level="debug">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="roll-by-time-and-size" />
     </root>
 </configuration>

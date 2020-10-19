@@ -1,7 +1,6 @@
 package botcommands;
 
 import app.Customer;
-
 import java.util.HashMap;
 
 
@@ -19,7 +18,7 @@ public class ShowCartCommand implements IBotCommand {
 
     @Override
     public String getDescription() {
-        return "null";
+        return "Show cart";
     }
 
     @Override

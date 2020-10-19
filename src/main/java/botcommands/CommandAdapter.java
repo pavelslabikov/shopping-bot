@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class CommandAdapter extends BotCommand {
-    public static final Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
 
     private final IBotCommand command;
 
@@ -21,11 +21,11 @@ public class CommandAdapter extends BotCommand {
     }
 
     @Override
-    public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        var response = command.execute(user.getId(), strings);
+    public void execute(AbsSender absSender, User user, Chat chat, String[] args) {
+        var response = command.execute(user.getId(), args);
         var message = new SendMessage();
         message.setChatId(chat.getId());
-        if (command.getCommandIdentifier().equals("/start")) {
+        if (getCommandIdentifier().equals("/start")) {
             message.setReplyMarkup(new Keyboard().getKeyboard());
             message.enableMarkdown(true);
         }
@@ -34,7 +34,7 @@ public class CommandAdapter extends BotCommand {
         try {
             absSender.execute(message);
         } catch (TelegramApiException e) {
-            logger.error("Caught exception with following stacktrace:", e);
+            logger.error("Cannot send reply for command {}: {}", getCommandIdentifier(), message, e);
         }
     }
 }

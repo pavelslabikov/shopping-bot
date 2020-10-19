@@ -21,7 +21,7 @@ public class AddToCartCommand implements IBotCommand {
 
     @Override
     public String getDescription() {
-        return "null";
+        return "Add item to cart";
     }
 
     @Override

@@ -22,7 +22,7 @@ public class SearchCommand implements IBotCommand {
 
     @Override
     public String getDescription() {
-        return "";
+        return "Search for an item in stock";
     }
 
     @Override
@@ -32,17 +32,20 @@ public class SearchCommand implements IBotCommand {
 
         if (args.length != 1)
             return "\u274C Неверное количество аргументов для команды!\nИспользуйте: /search <ID/NAME>";
-        else {
-            IStorageItem foundItem;
-            if (args[0].matches("\\d+")) {
-                var id = Integer.parseInt(args[0]);
-                foundItem = storage.getItemById(id);
-            } else
-                foundItem = storage.getItemByName(args[0]);
-            return foundItem == null
-                    ? "\u2753 Товар не найден!"
-                    : String.format("\uD83D\uDD0E Найденный товар:\n%s", foundItem);
+
+        IStorageItem foundItem;
+        if (args[0].matches("\\d+")) {
+            logger.info("Trying to find an item with id: {}", args[0]);
+            var id = Integer.parseInt(args[0]);
+            foundItem = storage.getItemById(id);
+        } else {
+            logger.info("Trying to find an item with name: {}", args[0]);
+            foundItem = storage.getItemByName(args[0]);
         }
+
+        return foundItem == null
+                ? "\u2753 Товар не найден!"
+                : String.format("\uD83D\uDD0E Найденный товар:\n%s", foundItem);
     }
 }
 
