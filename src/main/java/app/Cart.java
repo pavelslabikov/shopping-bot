@@ -11,7 +11,8 @@ public class Cart {
         content = new HashMap<>();
     }
 
-    public String addItem(IStorageItem item, int amountToAdd, int amountInStock) {
+    public String addItem(IStorageItem item, int amountToAdd) {
+        var amountInStock = item.getCount();
         if (content.containsKey(item))
             return "\u274C Данный товар уже находится в корзине!";
 

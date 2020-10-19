@@ -17,6 +17,8 @@ public class StorageItem implements IStorageItem, Serializable {
 
     public String getName() { return name; }
 
+    public String getLoverName() { return name.toLowerCase(); }
+
     public int getId() {
         return id;
     }

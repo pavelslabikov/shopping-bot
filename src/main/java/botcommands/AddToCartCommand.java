@@ -1,6 +1,7 @@
 package botcommands;
 
 import app.Customer;
+import app.state;
 import storages.IStorage;
 import storages.IStorageItem;
 import java.util.HashMap;
@@ -26,6 +27,15 @@ public class AddToCartCommand implements IBotCommand {
 
     @Override
     public String execute(Integer userId, String[] args) {
+        if (!customers.containsKey(userId))
+            return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
+
+        if (args.length == 0) {
+            customers.get(userId).setState(state.addId);
+            return "Введите id или название товара";
+        }
+
+        customers.get(userId).setState(state.start);
         var cart = customers.get(userId).getCart();
         IStorageItem itemToAdd;
 
@@ -42,7 +52,7 @@ public class AddToCartCommand implements IBotCommand {
             if (itemToAdd == null)
                 return "❓ Введённый идентификатор товара не был найден на складе!";
 
-            return cart.addItem(itemToAdd, Integer.parseInt(args[1]), storage.getItemAmount(id));
+            return cart.addItem(itemToAdd, Integer.parseInt(args[1]));
         }
 
         itemToAdd = storage.getItemByName(args[0]);
@@ -50,6 +60,6 @@ public class AddToCartCommand implements IBotCommand {
             return "❓ Введённое имя товара не было найдено на складе!";
 
         var id = itemToAdd.getId();
-        return cart.addItem(itemToAdd, Integer.parseInt(args[1]), storage.getItemAmount(id));
+        return cart.addItem(itemToAdd, Integer.parseInt(args[1]));
     }
 }
