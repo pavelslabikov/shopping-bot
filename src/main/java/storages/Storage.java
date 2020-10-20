@@ -42,8 +42,9 @@ public class Storage implements IStorage{
     }
 
     public StorageItem getItemByName(String name){
+        name = name.toLowerCase();
         for (var e : items){
-            if (e.getName().equals(name))
+            if (e.getLoverName().equals(name))
                 return e;
         }
 
