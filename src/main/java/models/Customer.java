@@ -1,26 +1,28 @@
-package app;
+package models;
 
+import app.UserState;
 import storages.IStorageItem;
 
 public class Customer {
     private final Cart cart;
     private final int id;
+
     private IStorageItem itemToAdd;
-    private state state;
+    private UserState state;
 
     public Customer(int id) {
         cart = new Cart();
         this.id = id;
-        state = app.state.start;
+        state = UserState.start;
     }
 
     public int getId() {
         return id;
     }
 
-    public state getState() { return state; }
+    public UserState getState() { return state; }
 
-    public void setState(state state) { this.state = state; }
+    public void setState(UserState state) { this.state = state; }
 
     public IStorageItem getItemToAdd() { return itemToAdd; }
 

@@ -2,6 +2,7 @@
 <configuration>
     <appender name="roll-by-time-and-size"
     class="ch.qos.logback.core.rolling.RollingFileAppender">
+
     <file>src/main/logs/current-log.log</file>
 
         <rollingPolicy

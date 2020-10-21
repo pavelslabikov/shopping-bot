@@ -1,6 +1,6 @@
 package app;
 
-public enum state {
+public enum UserState {
     addCount,
     addId,
     start

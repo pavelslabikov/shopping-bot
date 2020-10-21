@@ -1,6 +1,7 @@
 package botcommands;
 
-import app.Customer;
+import models.Customer;
+
 import java.util.HashMap;
 
 

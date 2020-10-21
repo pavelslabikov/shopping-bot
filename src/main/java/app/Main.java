@@ -13,10 +13,12 @@ public class Main {
         logger.info("Initializing API context...");
         ApiContextInitializer.init();
         var bot = new ShoppingBot();
-        bot.registerCommands();
+        var tgWrapper = new TelegramWrapper(bot);
+        tgWrapper.registerCommands();
+
         try {
             var telegramBotsApi = new TelegramBotsApi();
-            telegramBotsApi.registerBot(bot);
+            telegramBotsApi.registerBot(tgWrapper);
         } catch (TelegramApiRequestException e) {
             logger.error("Telegram API cannot register bot", e);
         }

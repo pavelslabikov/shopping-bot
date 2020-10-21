@@ -1,7 +1,7 @@
 package botcommands;
 
-import app.Customer;
-import app.state;
+import models.Customer;
+import app.UserState;
 import storages.IStorage;
 import storages.IStorageItem;
 
@@ -31,7 +31,7 @@ public class SearchCommand implements IBotCommand {
         if (!customers.containsKey(userId))
             return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
 
-        customers.get(userId).setState(state.start);
+        customers.get(userId).setState(UserState.start);
         if (args.length != 1)
             return "\u274C Неверное количество аргументов для команды!\nИспользуйте: /search <ID/NAME>";
 

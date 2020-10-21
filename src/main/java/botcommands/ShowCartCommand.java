@@ -1,7 +1,7 @@
 package botcommands;
 
-import app.Customer;
-import app.state;
+import models.Customer;
+import app.UserState;
 
 import java.util.HashMap;
 
@@ -28,7 +28,7 @@ public class ShowCartCommand implements IBotCommand {
         if (!customers.containsKey(userId))
             return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
 
-        customers.get(userId).setState(state.start);
+        customers.get(userId).setState(UserState.start);
         var currentCustomer = customers.get(userId);
         return currentCustomer.getCart().getItems();
     }

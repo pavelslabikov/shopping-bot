@@ -1,9 +1,10 @@
 package botcommands;
 
-import app.Customer;
-import app.state;
+import models.Customer;
+import app.UserState;
 import storages.IStorage;
 import storages.IStorageItem;
+
 import java.util.HashMap;
 
 public class AddToCartCommand implements IBotCommand {
@@ -31,11 +32,11 @@ public class AddToCartCommand implements IBotCommand {
             return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
 
         if (args.length == 0) {
-            customers.get(userId).setState(state.addId);
+            customers.get(userId).setState(UserState.addId);
             return "Введите id или название товара";
         }
 
-        customers.get(userId).setState(state.start);
+        customers.get(userId).setState(UserState.start);
         var cart = customers.get(userId).getCart();
         IStorageItem itemToAdd;
 
