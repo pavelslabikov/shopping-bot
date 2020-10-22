@@ -28,26 +28,30 @@ public class SearchCommand implements IBotCommand {
 
     @Override
     public String execute(Integer userId, String[] args) {
-        if (!customers.containsKey(userId))
+        var customer = customers.get(userId);
+        if (customer == null)
             return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
 
-        customers.get(userId).setState(UserState.start);
-        if (args.length != 1)
-            return "\u274C Неверное количество аргументов для команды!\nИспользуйте: /search <ID/NAME>";
+        if (customer.getState() == UserState.start) {
+            if (args.length > 1)
+                return "\u274C Для поиска введите имя/ID одного товара без пробелов!";
 
-        IStorageItem foundItem;
-        if (args[0].matches("\\d+")) {
-            logger.info("Trying to find an item with id: {}", args[0]);
-            var id = Integer.parseInt(args[0]);
-            foundItem = storage.getItemById(id);
-        } else {
-            logger.info("Trying to find an item with name: {}", args[0]);
-            foundItem = storage.getItemByName(args[0]);
+            IStorageItem foundItem;
+            if (args[0].matches("\\d+")) {
+                logger.info("Trying to find an item with id: {}", args[0]);
+                var id = Integer.parseInt(args[0]);
+                foundItem = storage.getItemById(id);
+            } else {
+                logger.info("Trying to find an item with name: {}", args[0]);
+                foundItem = storage.getItemByName(args[0]);
+            }
+
+            return foundItem == null
+                    ? "\u2753 Товар не найден!"
+                    : String.format("\uD83D\uDD0E Найденный товар:\n%s", foundItem);
         }
 
-        return foundItem == null
-                ? "\u2753 Товар не найден!"
-                : String.format("\uD83D\uDD0E Найденный товар:\n%s", foundItem);
+        return "WRONG STATE"; // TODO: fix
     }
 }
 
