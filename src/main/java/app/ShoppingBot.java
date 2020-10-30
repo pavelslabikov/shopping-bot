@@ -3,7 +3,6 @@ package app;
 import botcommands.*;
 import models.Customer;
 import storages.IStorage;
-import storages.Storage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,8 +12,8 @@ public class ShoppingBot {
 
     public final ArrayList<IBotCommand> availableCommands;
 
-    public ShoppingBot() {
-        storage = new Storage();
+    public ShoppingBot(IStorage storage) {
+        this.storage = storage;
         customers = new HashMap<>();
         availableCommands = new ArrayList<>();
         registerCommands();
