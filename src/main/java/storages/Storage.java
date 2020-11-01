@@ -50,9 +50,4 @@ public class Storage implements IStorage{
 
         return null;
     }
-
-    @Override
-    public int getItemAmount(int id) {
-        return getItemById(id).getCount();
-    }
 }

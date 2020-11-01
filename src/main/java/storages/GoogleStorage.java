@@ -1,15 +1,10 @@
 package storages;
 
-import app.Main;
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
@@ -19,7 +14,8 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +23,8 @@ import java.util.List;
 
 public class GoogleStorage implements IStorage {
     private final Sheets sheets;
-    private final String id;
+    private final String sheetId;
+    private final Character defaultWidth = 'E';
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleStorage.class);
     private static final String appName = "Shopping Bot";
@@ -37,7 +34,7 @@ public class GoogleStorage implements IStorage {
     private static final String CREDENTIALS_PATH = "/credentials.json";
 
     public GoogleStorage(String id, Sheets sheets) {
-        this.id = id;
+        this.sheetId = id;
         this.sheets = sheets;
     }
 
@@ -71,46 +68,58 @@ public class GoogleStorage implements IStorage {
         }
     }
 
-    public void main() throws IOException {
-        ValueRange response = sheets.spreadsheets().values()
-                .get(id, "A1:E1")
-                .execute();
-        List<List<Object>> values = response.getValues();
-        if (values == null || values.isEmpty()) {
-            System.out.println("No data found.");
-        } else {
-            for (var row : values)
-                System.out.println(row.get(0));
-        }
-    }
-
     @Override
     public ArrayList<String> getAllItems() {
-        return null;
+        var values = getValues("A2:E4");
+        var itemsList = new ArrayList<String>();
+        if (values != null){
+            for (var row : values){
+                itemsList.add(makeStorageItem(row).toString());
+            }
+        }
+        return itemsList;
     }
 
     @Override
     public IStorageItem getItemById(int id) {
+        var currentRange = String.format("A%d:%c%d", id + 1, defaultWidth, id + 1);
+        var values = getValues(currentRange);
+        if (values != null) {
+            return makeStorageItem(values.get(0));
+        }
         return null;
     }
 
     @Override
     public IStorageItem getItemByName(String name) {
+        var values = getValues("A2:E4");
+        if (values != null) {
+            for (var row:values) {
+                if (row.get(1).toString().toLowerCase().equals(name.toLowerCase())){
+                    return makeStorageItem(row);
+                }
+            }
+        }
         return null;
     }
 
-    @Override
-    public int getItemAmount(int itemId) {
-        try {
-            var response = sheets.spreadsheets().values()
-                    .get(id, "")
-                    .execute();
-            var values = response.getValues();
+    private StorageItem makeStorageItem(List<Object> row){
+        return new StorageItem(row.get(1).toString(), Integer.parseInt(row.get(0).toString()), Integer.parseInt(row.get(4).toString()), Integer.parseInt(row.get(3).toString()));
+    }
 
+    private List<List<Object>> getValues(String range){
+        ValueRange response = null;
+        try {
+            response = sheets.spreadsheets().values()
+                    .get(sheetId, range)
+                    .execute();
         } catch (IOException e) {
-            logger.error("Unable to send request to google sheet", e);
-            return -1;
+            logger.error("Can not connect to GoogleSheets");
         }
-        return 0;
+        if (response != null) {
+            return response.getValues();
+        }
+        logger.error("null response in GoogleStorage.GetValues");
+        return null;
     }
 }
