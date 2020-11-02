@@ -1,6 +1,7 @@
 package storages;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class StorageItem implements IStorageItem, Serializable {
     private final String name;
@@ -34,6 +35,16 @@ public class StorageItem implements IStorageItem, Serializable {
     @Override
     public int hashCode() {
         return Integer.hashCode(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StorageItem that = (StorageItem) o;
+        return id == that.id &&
+                price == that.price &&
+                Objects.equals(name, that.name);
     }
 
     @Override
