@@ -1,5 +1,6 @@
 package botcommands;
 
+import models.BotMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,5 +11,5 @@ public interface IBotCommand {
 
     String getDescription();
 
-    String execute(Integer userId, String[] args);
+    BotMessage execute(Integer userId, String[] args);
 }

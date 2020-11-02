@@ -25,12 +25,12 @@ public class CommandAdapter extends BotCommand {
         var response = command.execute(user.getId(), args);
         var message = new SendMessage();
         message.setChatId(chat.getId());
-        if (getCommandIdentifier().equals("/start")) {
-            message.setReplyMarkup(new Keyboard().getKeyboard());
+        if (response.getKeyboard() != null) {
+            message.setReplyMarkup(response.getKeyboard().getKeyboard());
             message.enableMarkdown(true);
         }
 
-        message.setText(response);
+        message.setText(response.getText());
         try {
             absSender.execute(message);
         } catch (TelegramApiException e) {

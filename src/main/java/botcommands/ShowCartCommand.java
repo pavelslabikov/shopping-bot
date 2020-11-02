@@ -1,5 +1,6 @@
 package botcommands;
 
+import models.BotMessage;
 import models.Customer;
 import app.UserState;
 
@@ -24,13 +25,17 @@ public class ShowCartCommand implements IBotCommand {
     }
 
     @Override
-    public String execute(Integer userId, String[] args) {
+    public BotMessage execute(Integer userId, String[] args) {
+        var resultMessage = new BotMessage();
         if (!customers.containsKey(userId))
-            return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
+            resultMessage.setText("\u274C Прежде чем вводить данную команду, начните работу с ботом!");
+        else {
+            customers.get(userId).setState(UserState.start);
+            var currentCustomer = customers.get(userId);
+            resultMessage.setText(currentCustomer.getCart().getItems());
+        }
 
-        customers.get(userId).setState(UserState.start);
-        var currentCustomer = customers.get(userId);
-        return currentCustomer.getCart().getItems();
+        return resultMessage;
     }
 }
 

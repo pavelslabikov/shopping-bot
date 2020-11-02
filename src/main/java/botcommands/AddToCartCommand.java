@@ -1,5 +1,6 @@
 package botcommands;
 
+import models.BotMessage;
 import models.Customer;
 import app.UserState;
 import storages.IStorage;
@@ -27,42 +28,49 @@ public class AddToCartCommand implements IBotCommand {
     }
 
     @Override
-    public String execute(Integer userId, String[] args) {
+    public BotMessage execute(Integer userId, String[] args) {
+        var resultMessage = new BotMessage();
         var customer = customers.get(userId);
-        if (customer == null)
-            return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
+        if (customer == null) {
+            resultMessage.setText("\u274C Прежде чем вводить данную команду, начните работу с ботом!");
+            return resultMessage;
+        }
 
         if (customer.getState() == UserState.start) {
             customer.setState(UserState.addId);
-            return "Введите имя/ID товара без пробелов:";
+            resultMessage.setText("Введите имя/ID товара без пробелов:");
         }
 
         if (customer.getState() == UserState.addId) {
-            if (args.length != 1)
-                return "\u274C Необходимо ввести имя/ID одного товара без пробелов!";
-
+            var itemName = String.join(" ", args);
             IStorageItem itemToAdd;
-            if (args[0].matches("^\\d+")){
-                var id = Integer.parseInt(args[0]);
+            if (itemName.matches("^\\d+")) {
+                var id = Integer.parseInt(itemName);
                 itemToAdd = storage.getItemById(id);
             } else
-                itemToAdd = storage.getItemByName(args[0]);
+                itemToAdd = storage.getItemByName(itemName);
 
             if (itemToAdd == null) {
                 customer.setState(UserState.start);
-                return "❓ Введённое имя/ID товара не было найдено на складе!";
+                resultMessage.setText("❓ Введённое имя/ID товара не было найдено на складе!");
+                return resultMessage;
             }
 
             customer.setItemToAdd(itemToAdd);
             customer.setState(UserState.addCount);
-            return "Введите количество товара:";
+            resultMessage.setText("Введите количество товара:");
         } else {
             if (args.length != 1 || !args[0].matches("^\\d+"))
-                return "\u274C Некорректный формат ввода!";
+            {
+                resultMessage.setText("\u274C Некорректный формат ввода!");
+                return resultMessage;
+            }
 
             customer.setState(UserState.start);
-            return customer.getCart()
-                    .addItem(customer.getItemToAdd(), Integer.parseInt(args[0]));
+            resultMessage.setText(customer.getCart()
+                    .addItem(customer.getItemToAdd(), Integer.parseInt(args[0])));
         }
+
+        return resultMessage;
     }
 }

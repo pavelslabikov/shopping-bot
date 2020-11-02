@@ -1,5 +1,6 @@
 package botcommands;
 
+import models.BotMessage;
 import models.Customer;
 import app.UserState;
 import storages.IStorage;
@@ -26,16 +27,19 @@ public class ShowStockCommand implements IBotCommand {
     }
 
     @Override
-    public String execute(Integer userId, String[] args) {
+    public BotMessage execute(Integer userId, String[] args) {
+        var resultMessage = new BotMessage();
         if (!customers.containsKey(userId))
-            return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
+            resultMessage.setText("\u274C Прежде чем вводить данную команду, начните работу с ботом!");
+        else {
+            customers.get(userId).setState(UserState.start);
+            var currentStock = new StringBuilder("\uD83D\uDCE6 Список всех товаров в наличии:\n\n");
+            var storageItems = storage.getAllItems();
+            for (var item : storageItems)
+                currentStock.append(String.format("%s\n", item));
+            resultMessage.setText(currentStock.toString());
+        }
 
-        customers.get(userId).setState(UserState.start);
-        var currentStock = new StringBuilder("\uD83D\uDCE6 Список всех товаров в наличии:\n\n");
-        var storageItems = storage.getAllItems();
-        for (var item : storageItems)
-            currentStock.append(String.format("%s\n", item));
-
-        return currentStock.toString();
+        return resultMessage;
     }
 }

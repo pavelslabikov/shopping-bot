@@ -1,6 +1,7 @@
 package app;
 
 import botcommands.*;
+import models.BotMessage;
 import models.Customer;
 import storages.IStorage;
 import java.util.ArrayList;
@@ -28,13 +29,18 @@ public class ShoppingBot {
         availableCommands.add(new StartCommand(customers));
     }
 
-    public String answerUser(int userId , String message) {
+    public BotMessage answerUser(int userId , String message) {
+        var resultMessage = new BotMessage();
         var customer = customers.get(userId);
-        if (customer == null)
-            return "\u274C Прежде чем вводить данную команду, начните работу с ботом - /start";
+        if (customer == null) {
+            resultMessage.setText("\u274C Прежде чем вводить данную команду, начните работу с ботом - /start");
+            return resultMessage;
+        }
 
-        if (message.startsWith("/"))
-            return "\u274C Неизвестная команда!";
+        if (message.startsWith("/")) {
+            resultMessage.setText("\u274C Неизвестная команда!");
+            return resultMessage;
+        }
 
         return switch (customer.getState()) {
             case addId, addCount -> new AddToCartCommand(customers, storage)

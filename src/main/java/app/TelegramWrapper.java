@@ -1,6 +1,7 @@
 package app;
 
 import botcommands.CommandAdapter;
+import models.BotMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
@@ -47,10 +48,10 @@ public class TelegramWrapper extends TelegramLongPollingCommandBot {
         return "javaShoppingBot";
     }
 
-    private void sendReplyToUser(Long chatId, String text) {
+    private void sendReplyToUser(Long chatId, BotMessage botMessage) {
         var message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(text);
+        message.setText(botMessage.getText());
         try {
             execute(message);
         } catch (TelegramApiException e) {

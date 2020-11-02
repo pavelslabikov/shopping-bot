@@ -1,5 +1,6 @@
 package botcommands;
 
+import models.BotMessage;
 import models.Customer;
 import app.UserState;
 import storages.IStorage;
@@ -27,31 +28,33 @@ public class SearchCommand implements IBotCommand {
     }
 
     @Override
-    public String execute(Integer userId, String[] args) {
+    public BotMessage execute(Integer userId, String[] args) {
+        var resultMessage = new BotMessage();
         var customer = customers.get(userId);
-        if (customer == null)
-            return "\u274C Прежде чем вводить данную команду, начните работу с ботом!";
-
-        if (customer.getState() == UserState.start) {
-            if (args.length > 1)
-                return "\u274C Для поиска введите имя/ID одного товара без пробелов!";
-
-            IStorageItem foundItem;
-            if (args[0].matches("\\d+")) {
-                logger.info("Trying to find an item with id: {}", args[0]);
-                var id = Integer.parseInt(args[0]);
-                foundItem = storage.getItemById(id);
-            } else {
-                logger.info("Trying to find an item with name: {}", args[0]);
-                foundItem = storage.getItemByName(args[0]);
-            }
-
-            return foundItem == null
-                    ? "\u2753 Товар не найден!"
-                    : String.format("\uD83D\uDD0E Найденный товар:\n%s", foundItem);
+        if (customer == null) {
+            resultMessage.setText("\u274C Прежде чем вводить данную команду, начните работу с ботом!");
+            return resultMessage;
         }
 
-        return "WRONG STATE"; // TODO: fix
+        if (customer.getState() == UserState.start) {
+            var itemToSearch = String.join(" ", args);
+            IStorageItem foundItem;
+            if (itemToSearch.matches("\\d+")) {
+                logger.info("Trying to find an item with id: {}", itemToSearch);
+                var id = Integer.parseInt(itemToSearch);
+                foundItem = storage.getItemById(id);
+            } else {
+                logger.info("Trying to find an item with name: {}", itemToSearch);
+                foundItem = storage.getItemByName(itemToSearch);
+            }
+
+            if (foundItem == null)
+                resultMessage.setText("\u2753 Товар не найден!");
+            else
+                resultMessage.setText(String.format("\uD83D\uDD0E Найденный товар:\n%s", foundItem));
+        }
+
+        return resultMessage;
     }
 }
 
