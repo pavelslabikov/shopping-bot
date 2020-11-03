@@ -3,6 +3,6 @@ package storages;
 public interface IStorageItem {
     int hashCode();
     int getId();
-    int getCount();
+    int getAmount();
     String toString();
 }

@@ -12,7 +12,7 @@ public class Cart {
     }
 
     public String addItem(IStorageItem item, int amountToAdd) {
-        var amountInStock = item.getCount();
+        var amountInStock = item.getAmount();
         if (content.containsKey(item))
             return "\u274C Данный товар уже находится в корзине!";
 
@@ -30,7 +30,7 @@ public class Cart {
 
     public String getItems() {
         if (content.isEmpty())
-            return "\u274CВаша корзина в данный момент пуста!";
+            return "\uD83D\uDED2 Ваша корзина в данный момент пуста!";
 
         var allItems = new StringBuilder("\uD83D\uDED2 Список товаров в корзине:\n");
         for (var item : content.keySet())

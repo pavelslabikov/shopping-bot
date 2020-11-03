@@ -7,12 +7,6 @@ public class SimpleStorage implements IStorage{
 
     public SimpleStorage(){
         var items = new ArrayList<StorageItem>();
-
-        items.add(new StorageItem("First_Item", 1, 100, 5));
-        items.add(new StorageItem("Second_Item", 2, 100, 5));
-        items.add(new StorageItem("Item1", 3, 100, 5));
-        items.add(new StorageItem("Trava", 228, 2500, 1000));
-
         this.items = items;
     }
 
@@ -44,7 +38,7 @@ public class SimpleStorage implements IStorage{
     public StorageItem getItemByName(String name){
         name = name.toLowerCase();
         for (var e : items){
-            if (e.getLoverName().equals(name))
+            if (e.getName().equalsIgnoreCase(name))
                 return e;
         }
 

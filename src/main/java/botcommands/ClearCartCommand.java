@@ -27,7 +27,7 @@ public class ClearCartCommand implements IBotCommand {
     public BotMessage execute(Integer userId, String[] args) {
         var resultMessage = new BotMessage();
         if (!customers.containsKey(userId))
-            resultMessage.setText("\u274C Прежде чем вводить данную команду, начните работу с ботом!");
+            resultMessage.setText("\u274C Начните работу с ботом - /start!");
         else {
             customers.get(userId).setState(UserState.start);
             var currentCustomer = customers.get(userId);

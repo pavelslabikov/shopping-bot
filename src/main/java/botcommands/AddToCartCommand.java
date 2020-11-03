@@ -32,16 +32,16 @@ public class AddToCartCommand implements IBotCommand {
         var resultMessage = new BotMessage();
         var customer = customers.get(userId);
         if (customer == null) {
-            resultMessage.setText("\u274C Прежде чем вводить данную команду, начните работу с ботом!");
+            resultMessage.setText("\u274C Начните работу с ботом - /start!");
             return resultMessage;
         }
 
         if (customer.getState() == UserState.start) {
             customer.setState(UserState.addId);
-            resultMessage.setText("Введите имя/ID товара без пробелов:");
+            resultMessage.setText("Введите имя/ID товара:");
         }
 
-        if (customer.getState() == UserState.addId) {
+        else if (customer.getState() == UserState.addId) {
             var itemName = String.join(" ", args);
             IStorageItem itemToAdd;
             if (itemName.matches("^\\d+")) {

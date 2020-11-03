@@ -17,9 +17,10 @@ public class HelpCommand implements IBotCommand {
     public BotMessage execute(Integer userId, String[] args) {
         var resultMessage = new BotMessage();
         resultMessage.setText("Список доступных команд:\n" +
-                "/help - помощь по командам\n/cart - отобразить содержимое корзины\n" +
+                "/help - помощь по командам\n" + "/start - начать работу с ботом\n" +
+                "/cart - отобразить содержимое корзины\n" +
                 "/clear - очистить содержимое корзины\n" +
-                "/add <ID> <amount> - добавить <amount> товаров с идентификатором <ID> в корзину\n" +
+                "/add - начать добавление товара в корзину\n" +
                 "/stock - отобразить все товары на складе");
         return resultMessage;
     }

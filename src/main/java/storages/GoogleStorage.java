@@ -22,10 +22,11 @@ public class GoogleStorage implements IStorage {
 
     @Override
     public ArrayList<String> getAllItems() {
-        var values = getValues("A2:E4");
+        var currentRange = String.format("A2:%c4", defaultWidth);
+        var grid = getValues(currentRange);
         var itemsList = new ArrayList<String>();
-        if (values != null) {
-            for (var row : values)
+        if (grid != null) {
+            for (var row : grid)
                 itemsList.add(makeStorageItem(row).toString());
         }
 
@@ -60,7 +61,8 @@ public class GoogleStorage implements IStorage {
         return new StorageItem(row.get(1).toString(),
                 Integer.parseInt(row.get(0).toString()),
                 Integer.parseInt(row.get(4).toString()),
-                Integer.parseInt(row.get(3).toString()));
+                Integer.parseInt(row.get(3).toString()),
+                row.get(2).toString());
     }
 
     private List<List<Object>> getValues(String range) {

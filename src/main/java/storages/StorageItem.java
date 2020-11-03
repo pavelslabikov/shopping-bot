@@ -1,35 +1,32 @@
 package storages;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class StorageItem implements IStorageItem, Serializable {
     private final String name;
     private final int id;
     private final int price;
     private final int amount;
+    private final String measure;
 
-    public StorageItem(String name, int id, int price, int amount){
+    public StorageItem(String name, int id, int price, int amount, String measure){
         this.name = name;
         this.id = id;
         this.price = price;
         this.amount = amount;
+        this.measure = measure;
     }
-
-    public String getName() { return name; }
-
-    public String getLoverName() { return name.toLowerCase(); }
 
     public int getId() {
         return id;
     }
 
-    public int getPrice() {
-        return price;
+    public int getAmount() {
+        return amount;
     }
 
-    public int getCount() {
-        return amount;
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -39,16 +36,18 @@ public class StorageItem implements IStorageItem, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         StorageItem that = (StorageItem) o;
         return id == that.id &&
                 price == that.price &&
-                Objects.equals(name, that.name);
+                name.equalsIgnoreCase(that.name);
     }
 
     @Override
     public String toString() {
-        return String.format("ID: %d, Имя: %s, Количество на складе: %d, Цена: %d", id, name, amount, price);
+        return String.format("ID: %d, Имя: %s, Количество на складе: %d %s, Цена: %d руб/%s", id, name, amount, measure, price, measure);
     }
 }
