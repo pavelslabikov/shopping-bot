@@ -37,7 +37,7 @@ public class ShoppingBot {
             return resultMessage;
         }
 
-        if (message.startsWith("/")) {
+        if (message == null || message.startsWith("/")) {
             resultMessage.setText("\u274C Неизвестная команда!");
             return resultMessage;
         }

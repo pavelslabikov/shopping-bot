@@ -11,6 +11,7 @@ hs_err_pid*
 .DS_Store
 *.log
 tokens
+/src/main/java/storages/google/cache/*
 
 ##############################
 ## Maven
@@ -47,3 +48,4 @@ out/
 *.ipr
 *.iws
 /main/logs/log.txt
+/src/main/java/storages/google/cache/1 - Item   1.jpg

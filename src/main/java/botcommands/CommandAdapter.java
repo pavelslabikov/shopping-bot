@@ -26,7 +26,7 @@ public class CommandAdapter extends BotCommand {
         var message = new SendMessage();
         message.setChatId(chat.getId());
         if (response.getKeyboard() != null) {
-            message.setReplyMarkup(response.getKeyboard().getKeyboard());
+            message.setReplyMarkup(response.getKeyboard().getButtons());
             message.enableMarkdown(true);
         }
 

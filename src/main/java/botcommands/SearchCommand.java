@@ -50,8 +50,10 @@ public class SearchCommand implements IBotCommand {
 
             if (foundItem == null)
                 resultMessage.setText("\u2753 Товар не найден!");
-            else
+            else {
                 resultMessage.setText(String.format("\uD83D\uDD0E Найденный товар:\n%s", foundItem));
+                resultMessage.setPhoto(foundItem.getImage());
+            }
         }
 
         return resultMessage;

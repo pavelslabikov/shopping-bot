@@ -10,7 +10,7 @@
             <fileNamePattern>
                 src/main/logs/%i - %d{yyyy-MM-dd}.log
             </fileNamePattern>
-            <maxFileSize>5KB</maxFileSize>
+            <maxFileSize>100KB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>1MB</totalSizeCap>
         </rollingPolicy>

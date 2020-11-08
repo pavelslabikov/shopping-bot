@@ -1,28 +1,34 @@
-package storages;
+package storages.google;
 
 import com.google.api.services.sheets.v4.Sheets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import storages.IStorage;
+import storages.IStorageItem;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleStorage implements IStorage {
     private final Sheets sheets;
     private final String sheetId;
-    private final Character defaultWidth = 'E';
+    private final Character defaultWidth = 'F';
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleStorage.class);
+    static final String CACHE_PATH = "src/main/java/storages/google/cache/";
 
     public GoogleStorage(String id) {
         this.sheetId = id;
         this.sheets = SheetFactory.getSheetInstance();
+        createCacheDir();
     }
 
     @Override
     public ArrayList<String> getAllItems() {
-        var currentRange = String.format("A2:%c4", defaultWidth);
+        var currentRange = String.format("A2:%c", defaultWidth);
         var grid = getValues(currentRange);
         var itemsList = new ArrayList<String>();
         if (grid != null) {
@@ -45,7 +51,7 @@ public class GoogleStorage implements IStorage {
 
     @Override
     public IStorageItem getItemByName(String name) {
-        var currentRange = String.format("A2:%c4", defaultWidth);
+        var currentRange = String.format("A2:%c", defaultWidth);
         var values = getValues(currentRange);
         if (values != null) {
             for (var row : values)
@@ -57,12 +63,23 @@ public class GoogleStorage implements IStorage {
         return null;
     }
 
-    private StorageItem makeStorageItem(List<Object> row){
+    private void createCacheDir() {
+        var path = Paths.get(CACHE_PATH);
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            logger.error("Cannot create directories: {}", CACHE_PATH, e);
+        }
+    }
+
+    private StorageItem makeStorageItem(List<Object> row) {
+        var imageURL = row.size() < 6 ? "" : row.get(5).toString();
         return new StorageItem(row.get(1).toString(),
                 Integer.parseInt(row.get(0).toString()),
                 Integer.parseInt(row.get(4).toString()),
                 Integer.parseInt(row.get(3).toString()),
-                row.get(2).toString());
+                row.get(2).toString(),
+                imageURL);
     }
 
     private List<List<Object>> getValues(String range) {

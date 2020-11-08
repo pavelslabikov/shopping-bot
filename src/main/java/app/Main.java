@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import storages.GoogleStorage;
+import storages.google.GoogleStorage;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);

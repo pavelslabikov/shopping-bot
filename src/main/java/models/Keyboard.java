@@ -7,16 +7,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 
 public class Keyboard {
-    private final ReplyKeyboardMarkup mainKeyboard;
+    private final ReplyKeyboardMarkup buttons;
 
     public Keyboard() {
-        mainKeyboard = new ReplyKeyboardMarkup();
+        buttons = new ReplyKeyboardMarkup();
         adjustKeyboard();
     }
 
     private void adjustKeyboard() {
-        mainKeyboard.setOneTimeKeyboard(false);
-        mainKeyboard.setResizeKeyboard(true);
+        buttons.setOneTimeKeyboard(false);
+        buttons.setResizeKeyboard(true);
 
         var keyboardRows = new ArrayList<KeyboardRow>();
 
@@ -32,10 +32,10 @@ public class Keyboard {
         keyboardRows.add(row2);
         keyboardRows.add(row3);
 
-        mainKeyboard.setKeyboard(keyboardRows);
+        buttons.setKeyboard(keyboardRows);
     }
 
-    public ReplyKeyboardMarkup getKeyboard(){
-        return mainKeyboard;
+    public ReplyKeyboardMarkup getButtons(){
+        return buttons;
     }
 }

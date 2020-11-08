@@ -1,8 +1,11 @@
-package storages;
+package storages.simple;
+
+import storages.IStorage;
+import storages.google.StorageItem;
 
 import java.util.ArrayList;
 
-public class SimpleStorage implements IStorage{
+public class SimpleStorage implements IStorage {
     public ArrayList<StorageItem> items;
 
     public SimpleStorage(){
