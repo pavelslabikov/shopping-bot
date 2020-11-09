@@ -1,6 +1,7 @@
 package storages.google;
 
 import org.apache.commons.io.FilenameUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storages.IStorageItem;
@@ -9,6 +10,8 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 
 public class StorageItem implements IStorageItem {
     private final String name;
@@ -17,16 +20,18 @@ public class StorageItem implements IStorageItem {
     private final int amount;
     private final String measure;
     private final String photoURL;
+    private final String modTime;
 
     private static final Logger logger = LoggerFactory.getLogger(StorageItem.class);
 
-    public StorageItem(String name, int id, int price, int amount, String measure, String photoURL) {
+    public StorageItem(String name, int id, int price, int amount, String measure, String photoURL, String modificationTime) {
         this.name = name;
         this.id = id;
         this.price = price;
         this.amount = amount;
         this.measure = measure;
         this.photoURL = photoURL;
+        modTime = modificationTime;
     }
 
     public int getId() {
@@ -50,9 +55,11 @@ public class StorageItem implements IStorageItem {
         var imageExtension = FilenameUtils.getExtension(photoURL);
         var imageFullPath = String.format("%s%d - %s.%s", GoogleStorage.CACHE_PATH, id, name, imageExtension);
         var imageFile = new File(imageFullPath);
+
         try {
-            if (!imageFile.createNewFile())
+            if (!imageFile.createNewFile() && isRelevant(imageFile))
                 return imageFile;
+
             var url = new URL(photoURL);
             var buffer = ImageIO.read(url);
             ImageIO.write(buffer, imageExtension, imageFile);
@@ -60,6 +67,21 @@ public class StorageItem implements IStorageItem {
         } catch (IOException e) {
             logger.error("Unable to get image of item: {}, with URL: {}", id, photoURL, e);
             return null;
+        }
+    }
+
+    private boolean isRelevant(File file) {
+        if (modTime.equals(""))
+            return false;
+
+        try {
+            var urlModifiedTime = new DateTime(modTime);
+            var attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+            var imageModifiedTime = new DateTime(attr.lastModifiedTime().toString());
+            return !imageModifiedTime.isBefore(urlModifiedTime);
+        } catch (IOException e) {
+            logger.error("Cannot read attributes of file: {}", file.getAbsolutePath(), e);
+            return false;
         }
     }
 

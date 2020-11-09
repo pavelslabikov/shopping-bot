@@ -15,7 +15,7 @@ import java.util.List;
 public class GoogleStorage implements IStorage {
     private final Sheets sheets;
     private final String sheetId;
-    private final Character defaultWidth = 'F';
+    private final Character defaultWidth = 'G';
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleStorage.class);
     static final String CACHE_PATH = "src/main/java/storages/google/cache/";
@@ -74,12 +74,13 @@ public class GoogleStorage implements IStorage {
 
     private StorageItem makeStorageItem(List<Object> row) {
         var imageURL = row.size() < 6 ? "" : row.get(5).toString();
+        var modTime = row.size() < 7 ? "" : row.get(6).toString();
         return new StorageItem(row.get(1).toString(),
                 Integer.parseInt(row.get(0).toString()),
                 Integer.parseInt(row.get(4).toString()),
                 Integer.parseInt(row.get(3).toString()),
                 row.get(2).toString(),
-                imageURL);
+                imageURL, modTime);
     }
 
     private List<List<Object>> getValues(String range) {
