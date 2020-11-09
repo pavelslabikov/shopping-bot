@@ -3,6 +3,7 @@ package botcommands;
 import models.BotMessage;
 import models.Customer;
 import app.UserState;
+import models.Keyboard;
 
 import java.util.HashMap;
 
@@ -26,8 +27,11 @@ public class ClearCartCommand implements IBotCommand {
     @Override
     public BotMessage execute(Integer userId, String[] args) {
         var resultMessage = new BotMessage();
-        if (!customers.containsKey(userId))
-            resultMessage.setText("\u274C Начните работу с ботом - /start!");
+        if (!customers.containsKey(userId)) {
+            logger.info("User {} has become a new customer", userId);
+            customers.put(userId, new Customer(userId));
+            resultMessage.setKeyboard(new Keyboard());
+        }
         else {
             customers.get(userId).setState(UserState.start);
             var currentCustomer = customers.get(userId);

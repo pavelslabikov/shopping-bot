@@ -33,8 +33,8 @@ public class ShoppingBot {
         var resultMessage = new BotMessage();
         var customer = customers.get(userId);
         if (customer == null) {
-            resultMessage.setText("\u274C Начните работу с ботом - /start!");
-            return resultMessage;
+            return new StartCommand(customers)
+                    .execute(userId, new String[]{});
         }
 
         if (message == null || message.startsWith("/")) {

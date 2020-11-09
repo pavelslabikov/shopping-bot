@@ -3,6 +3,7 @@ package botcommands;
 import models.BotMessage;
 import models.Customer;
 import app.UserState;
+import models.Keyboard;
 import storages.IStorage;
 import storages.IStorageItem;
 
@@ -32,8 +33,10 @@ public class AddToCartCommand implements IBotCommand {
         var resultMessage = new BotMessage();
         var customer = customers.get(userId);
         if (customer == null) {
-            resultMessage.setText("\u274C Начните работу с ботом - /start!");
-            return resultMessage;
+            customer = new Customer(userId);
+            logger.info("User {} has become a new customer", userId);
+            customers.put(userId, customer);
+            resultMessage.setKeyboard(new Keyboard());
         }
 
         if (customer.getState() == UserState.start) {
