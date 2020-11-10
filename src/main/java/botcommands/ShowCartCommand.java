@@ -32,12 +32,11 @@ public class ShowCartCommand implements IBotCommand {
             logger.info("User {} has become a new customer", userId);
             customers.put(userId, new Customer(userId));
             resultMessage.setKeyboard(new Keyboard());
-        } else {
-            customers.get(userId).setState(UserState.start);
-            var currentCustomer = customers.get(userId);
-            resultMessage.setText(currentCustomer.getCart().getItems());
         }
 
+        customers.get(userId).setState(UserState.start);
+        var currentCustomer = customers.get(userId);
+        resultMessage.setText(currentCustomer.getCart().getItems());
         return resultMessage;
     }
 }

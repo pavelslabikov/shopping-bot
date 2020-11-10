@@ -34,15 +34,14 @@ public class ShowStockCommand implements IBotCommand {
             logger.info("User {} has become a new customer", userId);
             customers.put(userId, new Customer(userId));
             resultMessage.setKeyboard(new Keyboard());
-        } else {
-            customers.get(userId).setState(UserState.start);
-            var currentStock = new StringBuilder("\uD83D\uDCE6 Список всех товаров в наличии:\n\n");
-            var storageItems = storage.getAllItems();
-            for (var item : storageItems)
-                currentStock.append(String.format("%s\n", item));
-            resultMessage.setText(currentStock.toString());
         }
 
+        customers.get(userId).setState(UserState.start);
+        var currentStock = new StringBuilder("\uD83D\uDCE6 Список всех товаров в наличии:\n\n");
+        var storageItems = storage.getAllItems();
+        for (var item : storageItems)
+            currentStock.append(String.format("%s\n", item));
+        resultMessage.setText(currentStock.toString());
         return resultMessage;
     }
 }

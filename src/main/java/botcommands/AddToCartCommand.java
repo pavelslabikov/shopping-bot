@@ -42,9 +42,7 @@ public class AddToCartCommand implements IBotCommand {
         if (customer.getState() == UserState.start) {
             customer.setState(UserState.addId);
             resultMessage.setText("Введите имя/ID товара:");
-        }
-
-        else if (customer.getState() == UserState.addId) {
+        } else if (customer.getState() == UserState.addId) {
             var itemName = String.join(" ", args);
             IStorageItem itemToAdd;
             if (itemName.matches("^\\d+")) {

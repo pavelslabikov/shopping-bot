@@ -53,9 +53,8 @@ public class StorageItem implements IStorageItem {
         }
 
         var imageExtension = FilenameUtils.getExtension(photoURL);
-        var imageFullPath = String.format("%s%d - %s.%s", GoogleStorage.CACHE_PATH, id, name, imageExtension);
-        var imageFile = new File(imageFullPath);
-
+        var imageFullName = String.format("%s%d - %s.%s", GoogleStorage.CACHE_PATH, id, name, imageExtension);
+        var imageFile = new File(imageFullName);
         try {
             if (!imageFile.createNewFile() && isRelevant(imageFile))
                 return imageFile;

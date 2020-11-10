@@ -32,10 +32,9 @@ public class ShoppingBot {
     public BotMessage answerUser(int userId , String message) {
         var resultMessage = new BotMessage();
         var customer = customers.get(userId);
-        if (customer == null) {
+        if (customer == null)
             return new StartCommand(customers)
                     .execute(userId, new String[]{});
-        }
 
         if (message == null || message.startsWith("/")) {
             resultMessage.setText("\u274C Неизвестная команда!");

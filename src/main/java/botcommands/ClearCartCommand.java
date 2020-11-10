@@ -32,12 +32,10 @@ public class ClearCartCommand implements IBotCommand {
             customers.put(userId, new Customer(userId));
             resultMessage.setKeyboard(new Keyboard());
         }
-        else {
-            customers.get(userId).setState(UserState.start);
-            var currentCustomer = customers.get(userId);
-            resultMessage.setText(currentCustomer.getCart().removeItems());
-        }
 
+        customers.get(userId).setState(UserState.start);
+        var currentCustomer = customers.get(userId);
+        resultMessage.setText(currentCustomer.getCart().removeItems());
         return resultMessage;
     }
 }
