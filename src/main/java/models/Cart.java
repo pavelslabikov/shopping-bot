@@ -3,6 +3,7 @@ package models;
 import storages.IStorageItem;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class Cart {
     private final HashMap<IStorageItem, Integer> content;
@@ -23,18 +24,16 @@ public class Cart {
         return "Товар успешно добавлен в корзину!";
     }
 
+    public boolean isEmpty() {
+        return content.isEmpty();
+    }
+
     public String removeItems() {
         content.clear();
         return "Корзина успешно очищена!";
     }
 
-    public String getItems() {
-        if (content.isEmpty())
-            return "\uD83D\uDED2 Ваша корзина в данный момент пуста!";
-
-        var allItems = new StringBuilder("\uD83D\uDED2 Список товаров в корзине:\n");
-        for (var item : content.keySet())
-            allItems.append(String.format("(%s) — %s шт.\n", item, content.get(item)));
-        return allItems.toString();
+    public Set<IStorageItem> getItems() {
+        return content.keySet();
     }
 }
